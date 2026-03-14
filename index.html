@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app">
+    <h1>💳 Expense Tracker</h1>
+    <p class="subtitle">Weekly expense dashboard</p>
+
+    <div class="card">
+        <label>Date</label>
+        <input type="date" id="date">
+
+        <label>Category</label>
+        <input type="text" id="category" placeholder="Food, Travel">
+
+        <label>Amount (₹)</label>
+        <input type="number" id="amount">
+
+        <button onclick="addExpense()">➕ Add Expense</button>
+        <button class="secondary" onclick="showSummary()">Day Summary</button>
+    </div>
+
+    <div class="output-card" id="output"></div>
+
+    <div class="output-card">
+        <h2>Weekly Expense Dashboard</h2>
+        <canvas id="weeklyChart"></canvas>
+    </div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+    <select id="weekSelect" onchange="updateWeeklyChart()">
+      <option value="current">Current Week</option>
+      <option value="previous">Previous Week</option>
+    </select>
+
+    <select id="monthSelect" onchange="updateMonthlyChart()">
+      <option value="0">January</option>
+      <option value="1">February</option>
+      <option value="2">March</option>
+      <option value="3">April</option>
+      <option value="4">May</option>
+      <option value="5">June</option>
+      <option value="6">July</option>
+      <option value="7">August</option>
+      <option value="8">September</option>
+      <option value="9">October</option>
+      <option value="10">November</option>
+      <option value="11">December</option>
+    </select>
+  </div>
+
+
+<script>
+function addExpense() {
+    fetch("/add_expense", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            date: date.value,
+            category: category.value,
+            amount: amount.value
+        })
+    })
+    .then(r => r.json())
+    .then(d => {
+        alert(d.message);
+        loadWeeklyChart();
+    });
+}
+
+function showSummary() {
+    fetch(`/expenses_by_date/${date.value}`)
+    .then(r => r.json())
+    .then(d => {
+        let html = `<h3>${date.value}</h3>`;
+        if (d.expenses.length === 0) {
+            html += `<p class="empty">No expenses</p>`;
+        } else {
+            d.expenses.forEach(e => {
+                html += `
+                <div class="expense-item">
+                    <span>${e.category}</span>
+                    <span>₹${e.amount}</span>
+                </div>`;
+            });
+            html += `<div class="total">Total: ₹${d.total}</div>`;
+        }
+        output.innerHTML = html;
+    });
+}
+
+let chart;
+function loadWeeklyChart() {
+    fetch("/weekly_summary")
+    .then(r => r.json())
+    .then(d => {
+        const ctx = document.getElementById("weeklyChart");
+
+        if (chart) chart.destroy();
+
+        chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: d.dates.map(date =>
+                    new Date(date).toLocaleDateString("en-IN", {
+                        weekday: "short",
+                        day: "numeric"
+                    })
+                ),
+                datasets: [{
+                    data: d.totals,
+                    backgroundColor: "#7aa7ff",
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: "#ffffff",
+                            font: { size: 12 }
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.15)"
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: "#ffffff"
+                        },
+                        grid: {
+                            color: "rgba(255,255,255,0.15)"
+                        }
+                    }
+                }
+            }
+        });
+    });
+}
+
+loadWeeklyChart();
+</script>
+
+</body>
+</html>
