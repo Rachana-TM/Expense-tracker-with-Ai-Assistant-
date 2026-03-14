@@ -1,0 +1,87 @@
+[
+    {
+        "date": "2026-02-17",
+        "category": "pizza",
+        "amount": 700
+    },
+    {
+        "date": "2026-02-26",
+        "category": "Salon",
+        "amount": 1000
+    },
+    {
+        "date": "2026-02-17",
+        "category": "Nail paint",
+        "amount": 300
+    },
+    {
+        "date": "2026-02-17",
+        "category": "Salon",
+        "amount": 700
+    },
+    {
+        "date": "2026-02-17",
+        "category": "Restaurent ",
+        "amount": 1000
+    },
+    {
+        "date": "2026-02-26",
+        "category": "Mysore Trip",
+        "amount": 5000
+    },
+    {
+        "date": "2026-02-25",
+        "category": "Books",
+        "amount": 500
+    },
+    {
+        "date": "2026-02-24",
+        "category": "Mobile Recharge",
+        "amount": 690
+    },
+    {
+        "date": "2026-02-23",
+        "category": "Dance Class fee",
+        "amount": 1000
+    },
+    {
+        "date": "2026-02-23",
+        "category": "Electricity bill",
+        "amount": 2000
+    },
+    {
+        "date": "2026-02-23",
+        "category": "Saree Shopping",
+        "amount": 9000
+    },
+    {
+        "date": "2026-02-26",
+        "category": "Food",
+        "amount": 890
+    },
+    {
+        "date": "2026-02-19",
+        "category": "Food",
+        "amount": 90
+    },
+    {
+        "date": "2026-02-27",
+        "category": "Xerox",
+        "amount": 10
+    },
+    {
+        "date": "2026-03-01",
+        "category": "Food",
+        "amount": 1000
+    },
+    {
+        "date": "2026-03-04",
+        "category": "Transport",
+        "amount": 180
+    },
+    {
+        "date": "2026-03-09",
+        "category": "Food",
+        "amount": 200
+    }
+]
