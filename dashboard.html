@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<nav>
+<h2>Expense Tracker Dashboard</h2>
+<a href="/">Home</a>
+</nav>
+
+<div class="page">
+
+<!-- Add Expense -->
+
+<div class="card">
+
+<h3>Add Expense</h3>
+
+<input type="date" id="date">
+
+<select id="category">
+<option value="">Select Category</option>
+<option value="Food">Food</option>
+<option value="Transport">Transport</option>
+<option value="Shopping">Shopping</option>
+<option value="Bills">Bills</option>
+<option value="Education">Education</option>
+<option value="Entertainment">Entertainment</option>
+<option value="Health">Health</option>
+<option value="Other">Other</option>
+</select>
+
+<input type="number" id="amount" placeholder="Amount">
+
+<button onclick="addExpense()">Add</button>
+
+</div>
+
+<!-- Day Summary -->
+
+<div class="card">
+
+<h3>Day Summary</h3>
+
+<button onclick="showSummary()">View</button>
+
+<div id="output"></div>
+
+</div>
+
+<!-- Weekly Chart -->
+
+<div class="card">
+
+<h3>Weekly Expense Chart</h3>
+
+<select id="weekSelect" onchange="loadWeeklyChart()">
+<option value="current">Current Week</option>
+<option value="previous">Previous Week</option>
+</select>
+
+<canvas id="weeklyChart"></canvas>
+
+</div>
+
+<!-- Monthly Chart -->
+
+<div class="card">
+
+<h3>Monthly Expense Chart</h3>
+
+<select id="monthSelect" onchange="loadMonthlyChart()">
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+
+<canvas id="monthlyChart"></canvas>
+
+</div>
+
+<!-- AI Chat -->
+
+<div class="card chatbox">
+
+<h3>🤖AI Expense Assistant</h3>
+
+<div id="chatArea"></div>
+
+<input type="text" id="userMessage" placeholder="Ask about expenses...">
+
+<button onclick="sendMessage()">Send</button>
+
+</div>
+
+</div>
+
+<script>
+
+function addExpense(){
+
+fetch("/add_expense",{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({
+
+date:date.value,
+
+category:category.value,
+
+amount:amount.value
+
+})
+
+})
+
+.then(r=>r.json())
+
+.then(d=>{
+
+alert(d.message)
+
+loadWeeklyChart()
+loadMonthlyChart()
+
+})
+
+}
+
+function showSummary(){
+
+fetch(`/expenses_by_date/${date.value}`)
+
+.then(r=>r.json())
+
+.then(d=>{
+
+let h=""
+
+d.expenses.forEach(e=>{
+
+h += `<p>${e.category}: ₹${e.amount}</p>`
+
+})
+
+h += `<b>Total: ₹${d.total}</b>`
+
+output.innerHTML=h
+
+})
+
+}
+
+let weeklyChart
+function loadWeeklyChart(){
+let week=document.getElementById("weekSelect").value
+fetch(`/weekly_summary?week=${week}`)
+.then(r=>r.json())
+.then(d=>{
+if(weeklyChart) weeklyChart.destroy()
+const ctx=document.getElementById("weeklyChart").getContext("2d")
+weeklyChart=new Chart(ctx,{
+type:"bar",
+data:{
+labels:d.dates,
+datasets:[{
+label:"Weekly Expenses",
+data:d.totals,
+backgroundColor:"#7aa7ff"
+}]
+},
+options:{
+responsive:true,
+plugins:{legend:{display:false}}
+}
+})
+})
+}
+let monthlyChart
+function loadMonthlyChart(){
+let month=document.getElementById("monthSelect").value
+
+fetch(`/monthly_summary?month=${month}`)
+
+.then(r=>r.json())
+
+.then(d=>{
+
+if(monthlyChart) monthlyChart.destroy()
+
+const ctx=document.getElementById("monthlyChart").getContext("2d")
+
+monthlyChart=new Chart(ctx,{
+
+type:"line",
+
+data:{
+
+labels:d.days,
+
+datasets:[{
+
+label:"Monthly Expenses",
+
+data:d.totals,
+
+borderColor:"#ff7a7a",
+
+fill:false
+
+}]
+
+},
+
+options:{
+
+responsive:true
+
+}
+
+})
+
+})
+
+}
+
+loadWeeklyChart()
+loadMonthlyChart()
+
+function sendMessage(){
+
+const msg=userMessage.value
+
+chatArea.innerHTML += `<p><b>You:</b> ${msg}</p>`
+
+fetch("/chat",{
+
+method:"POST",
+
+headers:{"Content-Type":"application/json"},
+
+body:JSON.stringify({message:msg})
+
+})
+
+.then(r=>r.json())
+
+.then(d=>{
+
+chatArea.innerHTML += `<p><b>AI:</b> ${d.reply}</p>`
+
+chatArea.scrollTop = chatArea.scrollHeight
+
+})
+
+userMessage.value=""
+
+}
+
+</script>
+
+</body>
+</html>
