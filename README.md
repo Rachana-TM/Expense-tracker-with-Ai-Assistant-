@@ -19,15 +19,15 @@ Personal Finance Users – to quickly check spending insights using the AI assis
 
 ## Tech Stack
 
-Frontend: HTML, CSS, JavaScript
+Frontend : HTML, CSS, JavaScript
 
-Backend: Python using Flask
+Backend : Python using Flask
 
-Data Visualization: Chart.js
+Data Visualization : Chart.js
 
-Data Storage: JSON File
+Data Storage : JSON File
 
-Server: Flask Development Server
+Server : Flask Development Server
 
 
 
