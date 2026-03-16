@@ -30,6 +30,6 @@ Data Storage: JSON File
 Server: Flask Development Server
 
 
-## Screenshots
+
 
 
