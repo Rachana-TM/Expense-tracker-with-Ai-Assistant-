@@ -31,6 +31,6 @@ Server : Flask Development Server
 
 ## Screenshot 
 ![image alt](https://github.com/Rachana-TM/Expense-tracker-with-Ai-Assistant-/blob/14ecda8f9d5f8bc3cbc4d121868b2ef1d04fa52d/FrontPage.png)
-![image alt](https://github.com/Rachana-TM/Expense-tracker-with-Ai-Assistant-/blob/01445ac16cbe5a4352c4b6d4702a5f3c70de6aa3/Screenshot%20(103).png)
+
 
 
