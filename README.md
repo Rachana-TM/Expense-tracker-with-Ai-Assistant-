@@ -29,7 +29,8 @@ Data Storage : JSON File
 
 Server : Flask Development Server
 
-
+## Screenshot 
+![image alt](https://github.com/Rachana-TM/Expense-tracker-with-Ai-Assistant-/blob/14ecda8f9d5f8bc3cbc4d121868b2ef1d04fa52d/FrontPage.png)
 
 
 
